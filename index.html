@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Digital Usability and Web Routines Study</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-study">
+
+  <div id="debug-bar" class="debug-bar" hidden>
+    <span>Test mode, group <strong id="debug-group">?</strong></span>
+    <button type="button" id="debug-switch">Switch group</button>
+    <button type="button" id="debug-reset">Reset</button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Consent (same for both groups) -->
+  <main id="screen-consent" class="screen study-page">
+    <div class="study-card">
+      <p class="study-kicker">Research study</p>
+      <h1>Digital Usability and Web Routines Study</h1>
+
+      <p>You are invited to take part in a study on digital habits, how people use web interfaces, and how they interact with everyday websites. The study is part of a bachelor's thesis in Psychology and Cognitive Sciences.</p>
+
+      <h2>What you will do</h2>
+      <p>You will use a web page and answer a few short sets of questions about your online routines. It takes about 5 minutes.</p>
+
+      <h2>Your answers</h2>
+      <p>Every question on the next pages is optional. You can leave anything blank that you are not comfortable answering, and you can stop at any time by closing this tab. Nothing is saved unless you reach the end and confirm.</p>
+
+      <h2>What is stored</h2>
+      <p>Only numbers and multiple-choice answers are stored. Nothing you type into a text box is stored or sent anywhere, and your name is never asked for. Results are analysed in aggregate.</p>
+
+      <h2>Technical information</h2>
+      <p>Like any website, this page can read standard information your browser shares (for example device type, screen size and approximate location based on your IP address). To show you this information later, the page looks up your IP address with a third-party service (ipapi.co). Your final answers are sent to a Google Sheets form, which means Google also receives your IP address when you submit. Neither your IP address nor your device details are stored in the study data.</p>
+
+      <h2>Contact</h2>
+      <p id="consent-contact"></p>
+
+      <button type="button" class="study-btn" id="consent-btn">I am 18 or older and agree to take part</button>
+    </div>
+  </main>
+
+  <!-- Shown if this browser already completed the study -->
+  <main id="screen-repeat" class="screen study-page" hidden>
+    <div class="study-card">
+      <h1>You have already taken part</h1>
+      <p>This browser has already completed the study. To keep the results accurate, each person can take part only once. Thank you for your help.</p>
+    </div>
+  </main>
+
+  <!-- Group A: scanner landing page -->
+  <div id="screen-landing" class="screen landing" hidden>
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="logo" href="#" data-nolink>
+          <svg class="logo-mark" viewBox="0 0 28 28" aria-hidden="true"><path d="M14 2 4 6v7c0 6.4 4.2 11.3 10 13 5.8-1.7 10-6.6 10-13V6L14 2Z" fill="currentColor"/><path d="M9.5 14.2 12.6 17.3 18.8 10.8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Halden
+        </a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="#" data-nolink>How it works</a>
+          <a href="#" data-nolink>For teams</a>
+          <a href="#" data-nolink>Help</a>
+        </nav>
+        <a href="#" class="nav-signin" data-nolink>Sign in</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <h1>See what the internet already knows about you.</h1>
+          <p class="hero-lede">Halden checks your details against known data breaches, people-search sites and the answers attackers guess first. You get a plain-language report with what to fix.</p>
+          <button type="button" class="btn-primary btn-lg" id="start-scan">Start free scan</button>
+          <p class="hero-note">No account needed. Takes about 3 minutes.</p>
+        </div>
+
+        <figure class="report-preview" aria-label="Example report">
+          <div class="preview-head">
+            <span class="preview-title">Exposure report</span>
+            <span class="preview-tag">Example</span>
+          </div>
+          <div class="preview-score">
+            <div class="score-ring" style="--pct: 64">
+              <span>64</span>
+            </div>
+            <div>
+              <strong>Moderate exposure</strong>
+              <span>4 issues found, 2 need attention</span>
+            </div>
+          </div>
+          <ul class="preview-rows">
+            <li><span class="dot dot-high"></span><span class="row-text">Email address<small>Found in 3 known breaches</small></span><span class="row-status status-high">Fix</span></li>
+            <li><span class="dot dot-high"></span><span class="row-text">Security answers<small>Guessable from public profiles</small></span><span class="row-status status-high">Fix</span></li>
+            <li><span class="dot dot-mid"></span><span class="row-text">People-search sites<small>Listed on 2 sites</small></span><span class="row-status status-mid">Review</span></li>
+            <li><span class="dot dot-ok"></span><span class="row-text">Password reuse<small>No matches</small></span><span class="row-status status-ok">OK</span></li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="how">
+      <div class="section-inner">
+        <h2>How a scan works</h2>
+        <ol class="how-steps">
+          <li>
+            <h3>Add a few details</h3>
+            <p>Answer some quick questions about your accounts and habits. Every field is optional, but each one widens the search.</p>
+          </li>
+          <li>
+            <h3>We check public sources</h3>
+            <p>Your details are compared with breach records, data broker listings and lists of commonly guessed security answers.</p>
+          </li>
+          <li>
+            <h3>Get your report</h3>
+            <p>See where you are exposed, ranked by risk, with the steps that make the biggest difference.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="privacy-band">
+      <div class="section-inner privacy-inner">
+        <svg class="privacy-icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="17" width="24" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M13 17v-4a7 7 0 0 1 14 0v4" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="20" cy="25.5" r="2.2" fill="currentColor"/></svg>
+        <div>
+          <h2>Your details stay yours</h2>
+          <p>Everything you enter is hashed in your browser before any lookup, so the raw values never reach our servers. Nothing is kept after you close the page, and we never sell or share data.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="section-inner footer-inner">
+        <span>&copy; 2026 Halden</span>
+        <nav aria-label="Footer">
+          <a href="#" data-nolink>Privacy</a>
+          <a href="#" data-nolink>Terms</a>
+          <a href="#" data-nolink>Status</a>
+          <a href="#" data-nolink>Contact</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Questionnaire shell (both groups, styled by theme) -->
+  <div id="screen-app" class="screen app" hidden>
+    <header class="app-bar">
+      <div class="app-bar-inner">
+        <div class="app-brand" id="app-brand"></div>
+        <ol class="steps" id="steps" aria-label="Progress">
+          <li data-step="1"></li>
+          <li data-step="2"></li>
+          <li data-step="3"></li>
+        </ol>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <div class="app-main">
+
+        <section id="screen-details" class="panel">
+          <h1 id="details-title"></h1>
+          <p class="panel-intro" id="details-intro"></p>
+
+          <div class="terms" id="terms">
+            <label class="terms-check">
+              <input type="checkbox" id="terms-checkbox" checked>
+              <span>I agree to the End User Licence Agreement and Data Processing Addendum. <a href="#" id="terms-toggle">View terms</a></span>
+            </label>
+            <div class="terms-text" id="terms-text" hidden>
+              <p>END USER LICENCE AGREEMENT AND DATA PROCESSING ADDENDUM. BY ACCESSING OR USING THIS SERVICE, YOU ("THE USER") ENTER INTO A BINDING AGREEMENT WITH THE PROVIDER CONCERNING DATA PROCESSING, TELEMETRY AND LIMITATION OF LIABILITY.</p>
+              <p>1.1 DEVICE TELEMETRY. The User consents to the Service reading and processing device and browser parameters, including but not limited to display resolution, graphics renderer (WebGL), processor core count, memory class, time zone, language settings and network address, together with an approximate location derived from that network address.</p>
+              <p>1.2 INTERACTIVE DIAGNOSTICS. The User agrees to take part in interactive query testing designed to evaluate resistance to account recovery prompts, historical data indexing and habituation to consent requests.</p>
+              <p>1.3 LIMITATION OF LIABILITY. Data processed locally within the User's browser environment is not deemed to have been collected by the Provider until transmission. The User waives, to the fullest extent permitted by law, any claim arising from the processing described in this section.</p>
+            </div>
+          </div>
+
+          <form id="details-form" class="question-list" novalidate autocomplete="off"></form>
+
+          <div class="panel-actions">
+            <button type="button" class="btn-primary" id="details-next"></button>
+          </div>
+        </section>
+
+        <section id="screen-habits" class="panel" hidden>
+          <h1 id="habits-title"></h1>
+          <p class="panel-intro" id="habits-intro"></p>
+          <form id="habits-form" class="likert-list" novalidate></form>
+          <p class="soft-warning" id="habits-warning" role="alert" hidden></p>
+          <div class="panel-actions">
+            <button type="button" class="btn-primary" id="habits-next"></button>
+          </div>
+        </section>
+
+        <section id="screen-scanning" class="panel scanning" hidden>
+          <h1 id="scanning-title"></h1>
+          <ul class="scan-steps" id="scan-steps"></ul>
+        </section>
+
+      </div>
+
+      <aside class="app-aside" id="app-aside" hidden>
+        <div class="aside-box">
+          <h2>This scan checks</h2>
+          <ul class="check-list">
+            <li>Known breach records</li>
+            <li>Commonly guessed security answers</li>
+            <li>People-search and data broker listings</li>
+            <li>Exposure of your account recovery details</li>
+          </ul>
+        </div>
+        <div class="aside-box aside-secure">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="17" width="24" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M13 17v-4a7 7 0 0 1 14 0v4" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+          <p>Inputs are hashed in your browser before lookup. Raw values never leave this device.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Reveal and report (same neutral design for both groups) -->
+  <main id="screen-report" class="screen study-page" hidden>
+    <div class="study-card report">
+      <p class="study-kicker">Research study</p>
+      <h1 id="report-title"></h1>
+      <p class="report-lede" id="report-lede"></p>
+
+      <div class="callout" id="report-summary"></div>
+
+      <h2>What you typed in</h2>
+      <p class="muted">These are shown only on this screen. They are deleted when you leave the page and are never sent or stored.</p>
+      <dl class="data-list" id="report-active"></dl>
+      <div class="explain">
+        <h3>Why these details matter</h3>
+        <p>Your email address is usually the starting point for resetting your other accounts. A first pet, a school and a childhood street are classic answers to security questions. Many large services no longer rely on these questions alone, but some banks, older accounts and customer support lines still accept them. Together with a birth year, these details also make phishing messages far more convincing, because an attacker can mention things only you should know.</p>
+      </div>
+
+      <h2>What your browser shared on its own</h2>
+      <p class="muted">No permission prompt appeared, yet any website can read the details below. They are not stored in the study data.</p>
+      <dl class="data-list" id="report-passive"></dl>
+      <div class="explain">
+        <h3>Why this matters</h3>
+        <p>None of these details identifies you on its own. Combined, they can form a browser fingerprint that is often distinctive enough for tracking networks to recognise the same device across different websites, even after cookies are cleared.</p>
+      </div>
+      <p class="terms-note" id="report-terms" hidden></p>
+
+      <h2>What you can do</h2>
+      <ul class="advice">
+        <li><strong>Treat security questions like passwords.</strong> Give made-up answers and keep them in a password manager, so nobody can look them up or guess them.</li>
+        <li><strong>Protect your email first.</strong> Turn on two-factor authentication, ideally with an authenticator app or a passkey rather than SMS. Your email can unlock most of your other accounts.</li>
+        <li><strong>Be wary of sites that ask for personal details to "check" your security.</strong> A legitimate breach checker, such as Have I Been Pwned, only needs your email address.</li>
+        <li><strong>Reduce fingerprinting.</strong> Browsers such as Firefox, Safari and Brave include protections that make your device harder to track across sites.</li>
+      </ul>
+
+      <button type="button" class="study-btn" id="report-next">Continue to the last questions</button>
+    </div>
+  </main>
+
+  <!-- Post-reveal questions -->
+  <main id="screen-followup" class="screen study-page" hidden>
+    <div class="study-card">
+      <p class="study-kicker">Research study</p>
+      <h1>A few last questions</h1>
+      <p>Please answer with the report you just saw in mind.</p>
+      <form id="followup-form" class="likert-list" novalidate></form>
+      <p class="soft-warning" id="followup-warning" role="alert" hidden></p>
+      <button type="button" class="study-btn" id="followup-next">Continue</button>
+    </div>
+  </main>
+
+  <!-- Full debrief and re-consent -->
+  <main id="screen-debrief" class="screen study-page" hidden>
+    <div class="study-card">
+      <p class="study-kicker">Research study</p>
+      <h1>About this study</h1>
+
+      <h2>What we were studying</h2>
+      <p>This study looks at the "privacy paradox": people often say their privacy matters to them, yet share personal details easily online. We wanted to know whether a website that presents itself as protecting you makes people share more than a plain survey does, and how seeing their own data changes how vulnerable people feel.</p>
+      <p>Participants were randomly assigned to one of two versions. <span id="debrief-version"></span></p>
+
+      <h2>What was not true</h2>
+      <ul class="plain-list" id="debrief-untrue"></ul>
+
+      <h2>Why we could not tell you at the start</h2>
+      <p>If people know a study is about sharing personal information, they share differently, and the results would no longer reflect everyday behaviour. Withholding this was approved for this study because no real harm results and everything is explained here, before any data is kept.</p>
+
+      <h2>What is kept, and what is not</h2>
+      <p>If you agree below, we keep only: which version you saw, whether each personal-detail box was filled in (not what you typed), your multiple-choice answers, your 1 to 7 ratings, whether you opened the terms, and how long each part took. Your typed answers, IP address, location and device details are never stored.</p>
+
+      <h2>Your choice</h2>
+      <p>Do you agree to your anonymous answers being included in the study data? If you choose not to, nothing from this session is sent.</p>
+
+      <div class="consent-actions">
+        <button type="button" class="study-btn" id="final-yes">Yes, include my anonymous answers</button>
+        <button type="button" class="study-btn-outline" id="final-no">No, discard my answers</button>
+      </div>
+
+      <h2>Questions or concerns</h2>
+      <p id="debrief-contact"></p>
+    </div>
+  </main>
+
+  <!-- End states -->
+  <main id="screen-finish" class="screen study-page" hidden>
+    <div class="study-card">
+      <h1 id="finish-title"></h1>
+      <div id="finish-body"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
