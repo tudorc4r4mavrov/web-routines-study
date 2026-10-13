@@ -9,12 +9,7 @@ const CONFIG = {
   // Shows the test bar (group switch and reset). Set to false before launch.
   debug: true,
 
-  researcher: '[Your full name]',
-  researcherEmail: '[your.email@university.ro]',
-  supervisor: '[Supervisor name]',
-  supervisorEmail: '[supervisor.email@university.ro]',
-  ethicsContact: '[Faculty ethics committee, email]',
-  withdrawUntil: '[date data collection closes]'
+ 
 };
 
 const DATA_VERSION = '2.0';
