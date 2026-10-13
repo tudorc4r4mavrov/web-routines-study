@@ -4,7 +4,7 @@
 const CONFIG = {
   // Google Apps Script web app URL (see apps-script.gs). Leave empty while
   // testing: the data is then downloaded as a JSON file instead of sent.
-  submitUrl: '',
+  submitUrl: 'https://script.google.com/macros/s/AKfycby6_8GSxieZsjImhYVEg56OjPjrN4TQIObkmkq1-K4LNxhMiO1GSdNMVqdnKbbuZN8/exec',
 
   // Shows the test bar (group switch and reset). Set to false before launch.
   debug: true,
