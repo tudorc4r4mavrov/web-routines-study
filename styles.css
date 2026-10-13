@@ -262,6 +262,9 @@ body.theme-study { background: var(--s-bg); color: var(--s-text); }
   border-bottom: 1px solid;
 }
 .likert:last-child { border-bottom: 0; }
+.likert.is-missing legend { color: #b42318 !important; }
+.likert.is-missing .scale span,
+.likert.is-missing .choice span { border-color: #e7a59d !important; }
 .likert legend {
   font-weight: 600;
   padding: 0;
@@ -306,9 +309,9 @@ body.theme-study { background: var(--s-bg); color: var(--s-text); }
   padding: 12px 14px;
   border-radius: var(--radius-sm);
   font-size: 15px;
-  background: #fff7e6;
-  border: 1px solid #f0d9a8;
-  color: #6b4a0e;
+  background: #fdf1ef;
+  border: 1px solid #f1c4bd;
+  color: #7a1d14;
 }
 
 /* neutral-page versions of the components */

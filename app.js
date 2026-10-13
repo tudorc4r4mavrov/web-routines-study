@@ -4,12 +4,10 @@
 const CONFIG = {
   // Google Apps Script web app URL (see apps-script.gs). Leave empty while
   // testing: the data is then downloaded as a JSON file instead of sent.
-  submitUrl: 'https://script.google.com/macros/s/AKfycby6_8GSxieZsjImhYVEg56OjPjrN4TQIObkmkq1-K4LNxhMiO1GSdNMVqdnKbbuZN8/exec',
+  submitUrl: '',
 
   // Shows the test bar (group switch and reset). Set to false before launch.
-  debug: true,
-
- 
+  debug: true
 };
 
 const DATA_VERSION = '2.0';
@@ -43,9 +41,7 @@ const session = {
   fillers: {},
   habits: {},
   followup: {},
-  network: null,
-  habitsWarned: false,
-  followupWarned: false
+  network: null
 };
 
 
@@ -423,10 +419,6 @@ function deviceClass() {
 // ---------- Flow ----------
 
 function init() {
-  $('consent-contact').innerHTML = contactLine();
-  $('debrief-contact').innerHTML = contactLine() +
-    ` You can also contact the ${escapeHtml(CONFIG.ethicsContact)}.`;
-
   if (CONFIG.debug) setupDebugBar();
 
   if (store.get('pp_done') === '1' && !CONFIG.debug) {
@@ -451,16 +443,15 @@ function init() {
   $('final-no').addEventListener('click', () => finish(false));
 
   ['details-form', 'habits-form', 'followup-form'].forEach(id => {
-    allowDeselect($(id));
     $(id).addEventListener('submit', e => e.preventDefault());
   });
-}
-
-function contactLine() {
-  return `If you have any questions, contact ${escapeHtml(CONFIG.researcher)} ` +
-    `(<a href="mailto:${escapeHtml(CONFIG.researcherEmail)}">${escapeHtml(CONFIG.researcherEmail)}</a>) ` +
-    `or the supervisor, ${escapeHtml(CONFIG.supervisor)} ` +
-    `(<a href="mailto:${escapeHtml(CONFIG.supervisorEmail)}">${escapeHtml(CONFIG.supervisorEmail)}</a>).`;
+  // Only the personal-detail questions are optional, so only they can be un-selected.
+  allowDeselect($('details-form'));
+  ['habits-form', 'followup-form'].forEach(id => {
+    $(id).addEventListener('change', e => {
+      e.target.closest('.likert')?.classList.remove('is-missing');
+    });
+  });
 }
 
 function assignGroup() {
@@ -552,34 +543,39 @@ function submitDetails() {
 }
 
 function collectRatings(items, target) {
-  let missing = 0;
-  items.forEach(item => {
-    const v = radioValue(item.id);
-    target[item.id] = v;
-    if (!v) missing++;
-  });
-  return missing;
+  items.forEach(item => { target[item.id] = radioValue(item.id); });
+  return items.filter(item => !target[item.id]);
 }
 
-// Ratings are not forced (consent says every question is optional), but people
-// are reminded once before moving on with gaps.
-function softCheck(missing, warningId, flag) {
+// Rating questions are required: the page will not move on until every item
+// has an answer. Unanswered items are highlighted and the first one is scrolled into view.
+function requireAll(formId, missing, warningId) {
   const warning = $(warningId);
-  if (missing && !session[flag]) {
-    session[flag] = true;
-    warning.textContent = missing === 1
-      ? 'One statement is unanswered. You can go back and answer it, or continue without it.'
-      : `${missing} statements are unanswered. You can go back and answer them, or continue without them.`;
-    warning.hidden = false;
-    return false;
+  const form = $(formId);
+  form.querySelectorAll('.likert').forEach(el => el.classList.remove('is-missing'));
+
+  if (!missing.length) {
+    warning.hidden = true;
+    return true;
   }
-  warning.hidden = true;
-  return true;
+
+  missing.forEach(item => {
+    form.querySelector(`input[name="${item.id}"]`).closest('.likert').classList.add('is-missing');
+  });
+  warning.textContent = missing.length === 1
+    ? 'Please answer the highlighted question to continue.'
+    : `Please answer the ${missing.length} highlighted questions to continue.`;
+  warning.hidden = false;
+
+  const first = form.querySelector('.likert.is-missing');
+  first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  first.querySelector('input').focus({ preventScroll: true });
+  return false;
 }
 
 function submitHabits() {
   const missing = collectRatings(HABIT_ITEMS, session.habits);
-  if (!softCheck(missing, 'habits-warning', 'habitsWarned')) return;
+  if (!requireAll('habits-form', missing, 'habits-warning')) return;
   runScanAnimation();
 }
 
@@ -669,7 +665,7 @@ function row(label, value, cls) {
 
 function submitFollowup() {
   const missing = collectRatings(FOLLOWUP_ITEMS, session.followup);
-  if (!softCheck(missing, 'followup-warning', 'followupWarned')) return;
+  if (!requireAll('followup-form', missing, 'followup-warning')) return;
 
   const group = session.group;
   $('debrief-version').textContent = group === 'A'
@@ -763,10 +759,7 @@ async function finish(consented) {
   store.set('pp_done', '1');
   $('finish-title').textContent = 'Thank you for taking part';
   $('finish-body').innerHTML =
-    `<p>Your anonymous answers have been saved. Your participant code is:</p>
-     <p class="participant-code"><strong>${escapeHtml(payload.code)}</strong></p>
-     <p>The code is not linked to your name or email. If you change your mind, send it to ${escapeHtml(CONFIG.researcherEmail)} before ${escapeHtml(CONFIG.withdrawUntil)} and your answers will be deleted.</p>
-     <p>You can close this tab now.</p>`;
+    `<p>Your anonymous answers have been saved. You can close this tab now.</p>`;
   show('screen-finish');
 }
 
